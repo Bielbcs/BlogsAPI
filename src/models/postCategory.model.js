@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   postCategory.associate = (models) => {
-    models.blog_post.belongsToMany(models.Category,
+    models.BlogPost.belongsToMany(models.Category,
     {
       as: 'categories',
       through: postCategory,
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       otherKey: 'category_id',
     });
 
-    models.Category.belongsToMany(models.blog_post,
+    models.Category.belongsToMany(models.BlogPost,
     {
       as: 'blog_posts',
       through: postCategory,
