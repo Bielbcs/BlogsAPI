@@ -6,4 +6,8 @@ const findUser = async (email) => {
   return user;
 };
 
-module.exports = { findUser };
+const signUp = async (body) => {
+  await User.create(body);
+};
+
+module.exports = { findUser, signUp };
