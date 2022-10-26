@@ -8,4 +8,10 @@ const addCategory = async (name) => {
   return category;
 };
 
-module.exports = { addCategory };
+const getAll = async () => {
+  const categories = await Category.findAll();
+
+  return categories;
+};
+
+module.exports = { addCategory, getAll };
