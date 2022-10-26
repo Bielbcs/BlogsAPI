@@ -23,7 +23,7 @@ const validate = (req, res, next) => {
     return res.status(401).send({ message: 'Expired or invalid token' });    
   }
 
-  next();
+  return next();
 };
 
 module.exports = { generate, validate };
