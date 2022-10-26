@@ -9,6 +9,21 @@ const generate = (req, res, next) => {
   req.headers.Authorization = token;
 
   return next();
-};  
+};
 
-module.exports = { generate };
+const validate = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) return res.status(401).send({ message: 'Token not found' });
+
+  try {
+    jwt.verify(authorization, process.env.JWT_SECRET);
+  } catch (e) {
+    console.log(e.message);
+    return res.status(401).send({ message: 'Expired or invalid token' });    
+  }
+
+  next();
+};
+
+module.exports = { generate, validate };

@@ -10,4 +10,10 @@ const signUp = async (body) => {
   await User.create(body);
 };
 
-module.exports = { findUser, signUp };
+const getAll = async () => {
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
+
+  return users;
+};
+
+module.exports = { findUser, signUp, getAll };

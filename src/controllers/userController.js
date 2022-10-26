@@ -13,4 +13,10 @@ const signUp = async (req, res) => {
   res.status(201).json({ token: Authorization });
 };
 
-module.exports = { signUp };
+const getAll = async (req, res) => {
+  const users = await useService.getAll();
+
+  res.status(200).json(users);
+};
+
+module.exports = { signUp, getAll };
