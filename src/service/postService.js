@@ -18,12 +18,23 @@ const addCategoryIds = async (categoryIds, postId) => {
 };
 
 const getAll = async () => {
-  const test = await BlogPost.findAll({ include: [
+  const posts = await BlogPost.findAll({ include: [
     { association: 'user', attributes: { exclude: ['password'] } },
     { association: 'categories' },
   ] }); 
 
-  return test;
+  return posts;
 };
 
-module.exports = { addPost, addCategoryIds, getAll };
+const getById = async (id) => {
+  const post = await BlogPost.findByPk(id, {
+    include: [
+      { association: 'user', attributes: { exclude: ['password'] } },
+      { association: 'categories' },
+    ],
+  });
+
+  return post;
+};
+
+module.exports = { addPost, addCategoryIds, getAll, getById };
