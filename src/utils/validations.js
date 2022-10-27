@@ -1,4 +1,5 @@
 const joi = require('joi');
+const categoryService = require('../service/categoryService');
 
 const validateLogin = async (req, res, next) => {
   const schema = joi.object({
@@ -32,4 +33,38 @@ const validateSignUp = async (req, res, next) => {
   }
 };
 
-module.exports = { validateLogin, validateSignUp };
+const validatePost = async (req, res, next) => {
+  const schema = joi.object({
+    title: joi.string().required(),
+    content: joi.string().required(),
+    categoryIds: joi.array().items(joi.number().required(), joi.number().required())
+      .unique((a, b) => a === b),
+  });
+
+  try {
+    await schema.validateAsync(req.body);
+    next();
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({ message: 'Some required fields are missing' });
+  }
+};
+
+const checkCategories = async (req, res, next) => {
+  const { categoryIds } = req.body;
+
+  const categories = await categoryService.getAll();
+
+  try {
+    categoryIds.forEach((category) => {
+      const test = categories.some(({ id }) => category === id);
+      if (!test) throw Error;
+    });
+    next();
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+  }
+};
+
+module.exports = { validateLogin, validateSignUp, validatePost, checkCategories };
