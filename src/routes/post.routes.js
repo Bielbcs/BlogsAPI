@@ -10,6 +10,9 @@ router.post('/', token.validate, validations.validatePost,
 
 router.get('/', token.validate, postController.getAll);
 
+router.put('/:id', token.validate, validations.validateAuthUser, 
+validations.validatePut, postController.editPost);
+
 router.get('/:id', token.validate, postController.getById);
 
 module.exports = router;

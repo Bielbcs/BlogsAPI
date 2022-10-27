@@ -17,7 +17,9 @@ const validate = (req, res, next) => {
   if (!authorization) return res.status(401).send({ message: 'Token not found' });
 
   try {
-    jwt.verify(authorization, process.env.JWT_SECRET);
+    const decoded = jwt.verify(authorization, process.env.JWT_SECRET);
+
+    req.headers.decoded = decoded;
   } catch (e) {
     console.log(e.message);
     return res.status(401).send({ message: 'Expired or invalid token' });    

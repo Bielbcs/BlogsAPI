@@ -25,4 +25,12 @@ const getById = async (req, res) => {
   return res.status(200).json(post);
 };
 
-module.exports = { addPost, getAll, getById };
+const editPost = async (req, res) => {
+  const { id } = req.params;
+
+  const editedPost = await postService.editPost(id, req.body);
+
+  return res.status(200).json(editedPost);
+};
+
+module.exports = { addPost, getAll, getById, editPost };

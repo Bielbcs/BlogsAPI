@@ -1,4 +1,5 @@
 const joi = require('joi');
+const { BlogPost, User } = require('../models');
 const categoryService = require('../service/categoryService');
 
 const validateLogin = async (req, res, next) => {
@@ -67,4 +68,37 @@ const checkCategories = async (req, res, next) => {
   }
 };
 
-module.exports = { validateLogin, validateSignUp, validatePost, checkCategories };
+const validateAuthUser = async (req, res, next) => {
+  const { id } = req.params;
+  const { decoded: { email } } = req.headers;
+
+  const user = await User.findOne({ where: { email } });
+
+  const post = await BlogPost.findByPk(Number(id));
+
+  if (post.userId !== user.id) return res.status(401).json({ message: 'Unauthorized user' });
+
+  return next();
+};
+
+const validatePut = async (req, res, next) => {
+  const schema = joi.object({
+    title: joi.string().required(),
+    content: joi.string().required(),
+  });
+
+  try {
+    await schema.validateAsync(req.body);
+    next();
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({ message: 'Some required fields are missing' });
+  }
+};
+
+module.exports = { validateLogin,
+validateSignUp,
+validatePost, 
+  checkCategories,
+validateAuthUser,
+validatePut };
