@@ -17,4 +17,13 @@ const addCategoryIds = async (categoryIds, postId) => {
   return result;
 };
 
-module.exports = { addPost, addCategoryIds };
+const getAll = async () => {
+  const test = await BlogPost.findAll({ include: [
+    { association: 'user', attributes: { exclude: ['password'] } },
+    { association: 'categories' },
+  ] }); 
+
+  return test;
+};
+
+module.exports = { addPost, addCategoryIds, getAll };
